@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
 import './App.css';
 import InputField from './components/InputField';
 import TodoList from './components/TodoList';
 import { Todo } from './model';
+
 
 // let name: string;
 // // number cant be assignned as it is declared as string 
@@ -113,9 +115,12 @@ const App:React.FC =() => {
 
   const [todos, setTodos]=useState<Todo[]>([]);
 
+  const [completedTodos ,setCompletedTodos]=useState<Todo[]>([])
+
   const handleAdd=(e:React.FormEvent)=>{
     e.preventDefault();
     if(todo){
+      // if something is filled into to do than this will add data to todo 
       setTodos([...todos,{id:Date.now(), todo, isDone:false}])
     }
     setTodo("");
@@ -124,6 +129,9 @@ const App:React.FC =() => {
   console.log(todos);
 
   return (
+    <DragDropContext onDragEnd={()=>{}}>
+
+    
     <div className="App">
     {/* <div className="container">
     <div className="App">Hello world! {name}</div>
@@ -134,9 +142,10 @@ const App:React.FC =() => {
 
     <span className="heading">Taskify</span>
     <InputField  todo={todo} setTodo={setTodo} handleAdd={handleAdd}/>
-    <TodoList todos={todos} setTodos={setTodos}/>
+    <TodoList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos}/>
     {/* {todos.map(t=><li>{t.todo}</li>)} */}
     </div>
+    </DragDropContext>
    
   );
 }

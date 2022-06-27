@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Draggable } from 'react-beautiful-dnd';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
 import { MdDone } from 'react-icons/md'
 import { Todo } from '../model';
@@ -6,13 +7,14 @@ import './styles.css'
 import TodoList from './TodoList';
 
 type Props={
+    index:number;
     todo:Todo;
     todos:Todo[];
     setTodos:React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 const SingleTodo= (props:Props) => {
-    const {todo,todos,setTodos}=props;
+    const {index,todo,todos,setTodos}=props;
 
 
     // this is to check if edit mode is on or not 
@@ -44,7 +46,11 @@ const SingleTodo= (props:Props) => {
         setTodos(todos.filter((todo)=>todo.id!==id));
     }
   return (
-    <form action="" className='todos__single' onSubmit={(e)=>handleEdit(e,todo.id)}>
+    <>
+    <Draggable draggableId={todo.id.toString()} index={index}>
+        {
+           (provided)=>(
+            <form action="" className='todos__single' onSubmit={(e)=>handleEdit(e,todo.id)} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
             {edit ?(
                 <input ref={inputRef} value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} className="todos__single--text"/>
                 
@@ -72,6 +78,11 @@ const SingleTodo= (props:Props) => {
             </span>
         </div>
     </form>
+           ) 
+        }
+    
+    </Draggable>
+    </>
   )
 }
 
